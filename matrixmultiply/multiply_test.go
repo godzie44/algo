@@ -40,8 +40,6 @@ var expectedCSmall = [][]int{
 	{4, 8},
 }
 
-
-
 func TestMultiply(t *testing.T) {
 	result := multiply(aSmall, bSmall)
 	assert.Equal(t, expectedCSmall, result)

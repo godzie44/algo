@@ -19,3 +19,13 @@ func GenerateRandomSlice(t *testing.T) []int {
 	assert.False(t, sort.IntsAreSorted(data), "terrible rand.Int")
 	return data
 }
+
+func GenerateTopBoundedRandomSlice(t *testing.T, maxInt int) []int {
+	data := make([]int, 10_000)
+	for i := 0; i < len(data); i++ {
+		data[i] = rand.Intn(maxInt + 1)
+	}
+
+	assert.False(t, sort.IntsAreSorted(data), "terrible rand.Int")
+	return data
+}

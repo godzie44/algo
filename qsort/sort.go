@@ -1,10 +1,12 @@
 package qsort
 
-import "math/rand"
+import (
+	"math/rand"
+)
 
 type Partition func(arr []int) int
 
-func randomizePartition(arr []int, p Partition) int {
+func RandomizePartition(arr []int, p Partition) int {
 	i := rand.Intn(len(arr))
 	arr[len(arr)-1], arr[i] = arr[i], arr[len(arr)-1]
 
@@ -13,13 +15,13 @@ func randomizePartition(arr []int, p Partition) int {
 
 func Lomuto(arr []int) {
 	if len(arr) > 1 {
-		q := randomizePartition(arr, lomutoPartition)
+		q := RandomizePartition(arr, LomutoPartition)
 		Lomuto(arr[:q])
 		Lomuto(arr[q+1:])
 	}
 }
 
-func lomutoPartition(arr []int) int {
+func LomutoPartition(arr []int) int {
 	x := arr[len(arr)-1]
 	i := -1
 	for j := 0; j < len(arr)-1; j++ {
@@ -35,13 +37,13 @@ func lomutoPartition(arr []int) int {
 
 func Hoare(arr []int) {
 	if len(arr) > 1 {
-		q := randomizePartition(arr, hoarePartition)
+		q := RandomizePartition(arr, HoarePartition)
 		Hoare(arr[:q+1])
 		Hoare(arr[q+1:])
 	}
 }
 
-func hoarePartition(arr []int) int {
+func HoarePartition(arr []int) int {
 	pivot := arr[0]
 	i := -1
 	j := len(arr)

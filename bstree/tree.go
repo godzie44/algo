@@ -2,6 +2,8 @@ package bstree
 
 import (
 	"fmt"
+	"io"
+	"strings"
 )
 
 type Node struct {
@@ -17,28 +19,33 @@ func NewTree() *Tree {
 	return &Tree{}
 }
 
-func (t *Tree) Print() {
-	printLvl(t.root)
+func (t *Tree) Visualize(w io.Writer) {
+	v := treeVisualizer{w}
+	v.runOnNode(t.root, "", false)
 }
 
-func printLvl(nodes ...*Node) {
-	if len(nodes) == 0 {
+type treeVisualizer struct {
+	w io.Writer
+}
+
+func (v *treeVisualizer) runOnNode(node *Node, prefix string, hasRightSister bool) {
+	if node == nil {
 		return
 	}
 
-	var nextLvl []*Node
-	for _, n := range nodes {
-		fmt.Print(n.val, " ")
-		if n.left != nil {
-			nextLvl = append(nextLvl, n.left)
-		}
-		if n.right != nil {
-			nextLvl = append(nextLvl, n.right)
-		}
+	printPrefix := strings.TrimRight(prefix, "│")
+	if hasRightSister {
+		printPrefix += "├"
+	} else {
+		prefix = printPrefix + " "
+		printPrefix += "└"
 	}
 
-	fmt.Print("\n")
-	printLvl(nextLvl...)
+	fmt.Fprintf(v.w, "%s── %d \n", printPrefix, node.val)
+
+	prefix += "   " + "│"
+	v.runOnNode(node.left, prefix, node.right != nil)
+	v.runOnNode(node.right, prefix, false)
 }
 
 func (t *Tree) Add(val int) {

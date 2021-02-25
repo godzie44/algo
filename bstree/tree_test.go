@@ -1,7 +1,9 @@
 package bstree
 
 import (
+	"bytes"
 	"github.com/stretchr/testify/assert"
+	"os"
 	"testing"
 )
 
@@ -22,8 +24,27 @@ func makeTree() *Tree {
 	return t
 }
 
-func TestPrintTree(t *testing.T) {
-	makeTree().Print()
+func TestVisualize(t *testing.T) {
+	expected := `└── 9 
+    ├── 5 
+    │   ├── 3 
+    │   │   └── 1 
+    │   └── 6 
+    │       └── 8 
+    └── 15 
+        ├── 12 
+        │   ├── 11 
+        │   └── 14 
+        └── 18 
+            └── 19 
+`
+
+	buff := bytes.NewBuffer([]byte{})
+
+	makeTree().Visualize(buff)
+	makeTree().Visualize(os.Stdout)
+
+	assert.Equal(t, expected, buff.String())
 }
 
 func TestOrder(t *testing.T) {

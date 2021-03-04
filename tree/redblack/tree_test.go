@@ -1,4 +1,4 @@
-package rbtree
+package redblack
 
 import (
 	"algorithms"

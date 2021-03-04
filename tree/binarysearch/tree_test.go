@@ -1,4 +1,4 @@
-package bstree
+package binarysearch
 
 import (
 	"bytes"

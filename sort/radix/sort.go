@@ -1,4 +1,4 @@
-package radixsort
+package radix
 
 const (
 	byteMask = 0xFF

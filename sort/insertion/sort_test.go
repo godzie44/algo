@@ -1,4 +1,4 @@
-package mergesort
+package insertion
 
 import (
 	"algorithms"

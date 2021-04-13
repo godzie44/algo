@@ -1,4 +1,4 @@
-package heapsort
+package heap
 
 func buildMaxHeap(arr []int, heapifyFn func(arr []int, ind int)) {
 	for i := len(arr) / 2; i >= 0; i-- {

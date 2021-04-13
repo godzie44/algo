@@ -1,8 +1,8 @@
 package sel
 
 import (
-	"algorithms/insertionsort"
-	"algorithms/qsort"
+	"algorithms/sort/insertion"
+	"algorithms/sort/qsort"
 )
 
 func Randomized(arr []int, ind int) int {
@@ -62,7 +62,7 @@ func findMedians(arr []int) []int {
 			continue
 		}
 
-		insertionsort.Sort(groups[i])
+		insertion.Sort(groups[i])
 		medians = append(medians, midEl(groups[i]))
 	}
 

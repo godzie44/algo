@@ -1,4 +1,4 @@
-package radixsort
+package radix
 
 import (
 	"algorithms"

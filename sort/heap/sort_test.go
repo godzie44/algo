@@ -1,4 +1,4 @@
-package heapsort
+package heap
 
 import (
 	"algorithms"

@@ -48,7 +48,7 @@ func TestBFS(test *testing.T) {
 func assertBFSVertex(t *testing.T, v *BFSVert, d int, p *BFSVert, c color) {
 	assert.Equal(t, d, v.D)
 	assert.Equal(t, p, v.P)
-	assert.Equal(t, black, v.color)
+	assert.Equal(t, c, v.color)
 }
 
 func TestBFSPrint(test *testing.T) {

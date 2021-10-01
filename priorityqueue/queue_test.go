@@ -10,25 +10,25 @@ import (
 func TestQueueMax(t *testing.T) {
 	randSlice, sortedSlice := prepareRandAndSortedArray(t)
 
-	var queue PriorityQueue
+	queue := NewPriorityQueue(MaxQueue)
 	for _, v := range randSlice {
 		queue.Insert(&QueueElement{Key: v, Value: nil})
 	}
 
-	assert.Equal(t, sortedSlice[0], queue.Maximum().Key)
+	assert.Equal(t, sortedSlice[0], queue.MaxOrMin().Key)
 }
 
 func TestQueueExtractMax(t *testing.T) {
 	randSlice, sortedSlice := prepareRandAndSortedArray(t)
 
-	var queue PriorityQueue
+	queue := NewPriorityQueue(MaxQueue)
 	for _, v := range randSlice {
 		queue.Insert(&QueueElement{Key: v, Value: nil})
 	}
 
 	queueResult := make([]int, 0, len(randSlice))
 	for {
-		v, err := queue.ExtractMaximum()
+		v, err := queue.ExtractMaxOrMin()
 		if err != nil {
 			break
 		}

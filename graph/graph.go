@@ -4,10 +4,24 @@ type V struct {
 	Val interface{}
 }
 
+type Edge struct {
+	V1, V2 *V
+}
+
 type G struct {
 	Vertexes []*V
 
 	Adj map[*V][]*V
+
+	Weights map[Edge]int
+}
+
+func (g *G) Weight(v1, v2 *V) int {
+	if w, exists := g.Weights[Edge{v1, v2}]; exists {
+		return w
+	}
+
+	return g.Weights[Edge{v2, v1}]
 }
 
 func Transpose(g G) G {

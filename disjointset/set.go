@@ -1,12 +1,12 @@
 package disjointset
 
 type Set struct {
-	Val    rune
+	Val    interface{}
 	parent *Set
 	rank   int
 }
 
-func NewSet(x rune) *Set {
+func NewSet(x interface{}) *Set {
 	set := &Set{
 		Val:  x,
 		rank: 0,

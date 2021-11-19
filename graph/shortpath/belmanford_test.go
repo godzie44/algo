@@ -15,7 +15,7 @@ var (
 	z = &graph.V{Val: "z"}
 )
 
-var gr = graph.G{
+var bfGraph = graph.G{
 	Vertexes: []*graph.V{s, t, x, y, z},
 	Adj: map[*graph.V][]*graph.V{
 		s: {t, y},
@@ -39,7 +39,7 @@ var gr = graph.G{
 }
 
 func TestBellmanFord(test *testing.T) {
-	path, exists := BellmanFord(&gr, s)
+	path, exists := BellmanFord(&bfGraph, s)
 	require.True(test, exists)
 
 	var end *PathVertex

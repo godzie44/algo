@@ -49,6 +49,10 @@ func (p *PriorityQueue) MaxOrMin() *QueueElement {
 	return p.a[0]
 }
 
+func (p *PriorityQueue) Empty() bool {
+	return len(p.a) == 0
+}
+
 var ErrEmptyQueue = errors.New("empty queue")
 
 func (p *PriorityQueue) ExtractMaxOrMin() (*QueueElement, error) {

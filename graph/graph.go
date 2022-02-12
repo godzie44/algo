@@ -1,5 +1,7 @@
 package graph
 
+import "math"
+
 type V struct {
 	Val interface{}
 }
@@ -14,6 +16,27 @@ type G struct {
 	Adj map[*V][]*V
 
 	Weights map[Edge]int
+}
+
+type WeightMatrix [][]int
+
+func (g *G) WeightMatrix() (w WeightMatrix) {
+	n := len(g.Vertexes)
+	w = make(WeightMatrix, n)
+	for i := 0; i < n; i++ {
+		w[i] = make([]int, n)
+		for j := 0; j < n; j++ {
+			if i == j {
+				continue
+			}
+			if we, exists := g.Weights[Edge{g.Vertexes[i], g.Vertexes[j]}]; exists {
+				w[i][j] = we
+			} else {
+				w[i][j] = math.MaxInt
+			}
+		}
+	}
+	return w
 }
 
 func (g *G) Weight(v1, v2 *V) int {
@@ -61,3 +84,5 @@ func CountSimplePaths(g G, s, t *V) int {
 	answer := count(d, w, Transpose(g), t)
 	return answer
 }
+
+type MatrixG [][]int

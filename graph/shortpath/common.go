@@ -30,6 +30,15 @@ func (p Path) Source() *PathVertex {
 	return nil
 }
 
+func (p Path) LenFor(v *graph.V) int {
+	for _, pv := range p {
+		if pv.V == v {
+			return pv.D
+		}
+	}
+	panic("unknown vertex")
+}
+
 func initialize(g *graph.G, source *graph.V) map[*graph.V]*PathVertex {
 	result := make(map[*graph.V]*PathVertex, len(g.Vertexes))
 

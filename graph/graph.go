@@ -20,6 +20,24 @@ type G struct {
 
 type WeightMatrix [][]int
 
+func (g *G) Copy() *G {
+	copyG := &G{
+		Adj:     map[*V][]*V{},
+		Weights: map[Edge]int{},
+	}
+
+	copyG.Vertexes = append(copyG.Vertexes, g.Vertexes...)
+
+	for k, v := range g.Adj {
+		copyG.Adj[k] = v
+	}
+	for k, v := range g.Weights {
+		copyG.Weights[k] = v
+	}
+
+	return copyG
+}
+
 func (g *G) WeightMatrix() (w WeightMatrix) {
 	n := len(g.Vertexes)
 	w = make(WeightMatrix, n)

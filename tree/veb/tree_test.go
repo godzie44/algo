@@ -1,7 +1,6 @@
 package veb
 
 import (
-	"fmt"
 	"github.com/stretchr/testify/assert"
 	"testing"
 )
@@ -10,7 +9,6 @@ func TestTreeCreate(t *testing.T) {
 	tree := NewTree(16)
 
 	assert.NotNil(t, tree)
-	fmt.Println(tree)
 }
 
 func TestTreeInsert(t *testing.T) {
@@ -25,7 +23,6 @@ func TestTreeInsert(t *testing.T) {
 	tree.Insert(15)
 
 	assert.NotNil(t, tree)
-	fmt.Println(tree)
 }
 
 func TestTreeIsMember(t *testing.T) {

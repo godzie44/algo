@@ -29,14 +29,16 @@ func Dijkstra(g *graph.G, source *graph.V) Path {
 		for _, v := range g.Adj[u.Value.(*PathVertex).V] {
 			relax(g, u.Value.(*PathVertex), vertexes[v])
 
-			var idx int
+			var idx = -1
 			queue.ForEach(func(i int, el *priorityqueue.QueueElement) {
 				if el.Value.(*PathVertex).V == v {
 					idx = i
 				}
 			})
 
-			_ = queue.IncreaseKey(idx, vertexes[v].D)
+			if idx != -1 {
+				_ = queue.IncreaseKey(idx, vertexes[v].D)
+			}
 		}
 	}
 }

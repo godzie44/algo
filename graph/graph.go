@@ -65,6 +65,27 @@ func (g *G) Weight(v1, v2 *V) int {
 	return g.Weights[Edge{v2, v1}]
 }
 
+func (g *G) RemoveEdge(e Edge) {
+	delete(g.Weights, e)
+
+	var ind int
+	for i, v := range g.Adj[e.V1] {
+		if v == e.V2 {
+			ind = i
+			break
+		}
+	}
+	g.Adj[e.V1] = append(g.Adj[e.V1][:ind], g.Adj[e.V1][ind+1:]...)
+}
+
+func (g *G) AddEdge(e Edge) {
+	g.Weights[e] = 0
+	if _, exists := g.Adj[e.V1]; !exists {
+		g.Adj[e.V1] = make([]*V, 0)
+	}
+	g.Adj[e.V1] = append(g.Adj[e.V1], e.V2)
+}
+
 func Transpose(g G) G {
 	transposed := G{Vertexes: g.Vertexes, Adj: map[*V][]*V{}}
 

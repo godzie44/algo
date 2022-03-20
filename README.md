@@ -33,7 +33,7 @@ This repo is a GO realization of algorithms from book "Introduction to Algorithm
 * [Minimum Spanning Trees](https://github.com/godzie44/algo/tree/main/graph/mst)
 * [Single-Source Shortest Paths](https://github.com/godzie44/algo/tree/main/graph/shortpath)
 * [All-Pairs Shortest Paths](https://github.com/godzie44/algo/tree/main/graph/shortpath/all)
-* Maximum Flow
+* [Maximum Flow](https://github.com/godzie44/algo/tree/main/graph/flow)
 7. Selected Topics
 * Multithreaded Algorithms
 * Matrix Operations

@@ -1,4 +1,4 @@
-package main
+package matrixmultiply
 
 func multiply(m1, m2 [][]int) [][]int {
 	if len(m1) != len(m2[0]) {

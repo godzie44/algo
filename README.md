@@ -35,7 +35,7 @@ This repo is a GO realization of algorithms from book "Introduction to Algorithm
 * [All-Pairs Shortest Paths](https://github.com/godzie44/algo/tree/main/graph/shortpath/all)
 * [Maximum Flow](https://github.com/godzie44/algo/tree/main/graph/flow)
 7. Selected Topics
-* Multithreaded Algorithms
+* Multithreaded Algorithms [1](https://github.com/godzie44/algo/blob/main/matrixmultiply/multithread.go) [2](https://github.com/godzie44/algo/blob/main/sort/merge/mutlithread.go)
 * Matrix Operations
 * Linear Programming
 * Polynomials and the FFT

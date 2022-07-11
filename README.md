@@ -38,7 +38,7 @@ This repo is a GO realization of algorithms from book "Introduction to Algorithm
 * Multithreaded Algorithms [1](https://github.com/godzie44/algo/blob/main/matrixmultiply/multithread.go) [2](https://github.com/godzie44/algo/blob/main/sort/merge/mutlithread.go)
 * [Matrix Operations](https://github.com/godzie44/algo/tree/main/matrix) 
 * [Linear Programming](https://github.com/godzie44/algo/tree/main/linear)
-* Polynomials and the FFT
+* [Polynomials and the FFT](https://github.com/godzie44/algo/tree/main/fft)
 * Number-Theoretic Algorithms
 * String Matching
 * Computational Geometry

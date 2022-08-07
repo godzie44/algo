@@ -39,7 +39,7 @@ This repo is a GO realization of algorithms from book "Introduction to Algorithm
 * [Matrix Operations](https://github.com/godzie44/algo/tree/main/matrix) 
 * [Linear Programming](https://github.com/godzie44/algo/tree/main/linear)
 * [Polynomials and the FFT](https://github.com/godzie44/algo/tree/main/fft)
-* Number-Theoretic Algorithms
+* [Number-Theoretic Algorithms](https://github.com/godzie44/algo/tree/main/numbertheoretic)
 * String Matching
 * Computational Geometry
 * NP-Completeness

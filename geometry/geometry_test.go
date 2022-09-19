@@ -77,3 +77,43 @@ func TestAnySegmentIntersect(t *testing.T) {
 		assert.Equal(t, tc.intersect, intersect)
 	}
 }
+
+func TestGrahamScan(t *testing.T) {
+	points := []Point{
+		{1, 0},
+		{8, 1},
+		{7, 2},
+		{9, 3},
+		{6.5, 3},
+		{6, 4},
+		{5, 5},
+		{4, 4.5},
+		{3, 3.5},
+		{2, 4.5},
+		{1.5, 8},
+		{1, 4.5},
+		{0, 3},
+	}
+
+	assert.Equal(t, []Point{{1, 0}, {8, 1}, {9, 3}, {1.5, 8}, {0, 3}}, GrahamScan(points))
+}
+
+func TestJarvisScan(t *testing.T) {
+	points := []Point{
+		{1, 0},
+		{8, 1},
+		{7, 2},
+		{9, 3},
+		{6.5, 3},
+		{6, 4},
+		{5, 5},
+		{4, 4.5},
+		{3, 3.5},
+		{2, 4.5},
+		{1.5, 8},
+		{1, 4.5},
+		{0, 3},
+	}
+
+	assert.Equal(t, []Point{{1, 0}, {8, 1}, {9, 3}, {1.5, 8}, {0, 3}}, JarvisScan(points))
+}

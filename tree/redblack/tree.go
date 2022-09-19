@@ -14,32 +14,36 @@ const (
 	Black
 )
 
-type Node struct {
-	val                 int
+type Comparable[T any] interface {
+	Compare(candidate T) int
+}
+
+type Node[T Comparable[T]] struct {
+	Val                 T
 	color               Color
-	left, right, parent *Node
+	left, right, parent *Node[T]
 }
 
-type Tree struct {
-	root *Node
-	Nil  *Node
+type Tree[T Comparable[T]] struct {
+	root *Node[T]
+	Nil  *Node[T]
 }
 
-func NewTree() *Tree {
-	nilNode := &Node{color: Black}
-	return &Tree{Nil: nilNode, root: nilNode}
+func NewTree[T Comparable[T]]() *Tree[T] {
+	nilNode := &Node[T]{color: Black}
+	return &Tree[T]{Nil: nilNode, root: nilNode}
 }
 
-func (t *Tree) Visualize(w io.Writer) {
-	v := treeVisualizer{w}
+func (t *Tree[T]) Visualize(w io.Writer) {
+	v := treeVisualizer[T]{w}
 	v.runOnNode(t.root, "", false)
 }
 
-type treeVisualizer struct {
+type treeVisualizer[T Comparable[T]] struct {
 	w io.Writer
 }
 
-func (v *treeVisualizer) runOnNode(node *Node, prefix string, hasRightSister bool) {
+func (v *treeVisualizer[T]) runOnNode(node *Node[T], prefix string, hasRightSister bool) {
 	if node == nil {
 		return
 	}
@@ -53,9 +57,9 @@ func (v *treeVisualizer) runOnNode(node *Node, prefix string, hasRightSister boo
 	}
 
 	if node.color == Red {
-		fmt.Fprintf(v.w, "%s── r%d \n", printPrefix, node.val)
+		fmt.Fprintf(v.w, "%s── r%v \n", printPrefix, node.Val)
 	} else {
-		fmt.Fprintf(v.w, "%s── b%d \n", printPrefix, node.val)
+		fmt.Fprintf(v.w, "%s── b%v \n", printPrefix, node.Val)
 	}
 
 	prefix += "   " + "│"
@@ -63,10 +67,10 @@ func (v *treeVisualizer) runOnNode(node *Node, prefix string, hasRightSister boo
 	v.runOnNode(node.right, prefix, false)
 }
 
-func (t *Tree) Search(val int) *Node {
+func (t *Tree[T]) Search(val T) *Node[T] {
 	x := t.root
-	for x != nil && x.val != val {
-		if val < x.val {
+	for x != nil && x.Val.Compare(val) != 0 {
+		if val.Compare(x.Val) == -1 {
 			x = x.left
 		} else {
 			x = x.right
@@ -80,7 +84,7 @@ func (t *Tree) Search(val int) *Node {
 	return x
 }
 
-func (t *Tree) Min() *Node {
+func (t *Tree[T]) Min() *Node[T] {
 	x := t.root
 	for x.left != t.Nil {
 		x = x.left
@@ -88,7 +92,7 @@ func (t *Tree) Min() *Node {
 	return x
 }
 
-func (t *Tree) Max() *Node {
+func (t *Tree[T]) Max() *Node[T] {
 	x := t.root
 	for x.right != t.Nil {
 		x = x.right
@@ -96,9 +100,9 @@ func (t *Tree) Max() *Node {
 	return x
 }
 
-func (t *Tree) Successor(n *Node) *Node {
+func (t *Tree[T]) Successor(n *Node[T]) *Node[T] {
 	if n.right != t.Nil {
-		rTree := &Tree{root: n.right, Nil: t.Nil}
+		rTree := &Tree[T]{root: n.right, Nil: t.Nil}
 		return rTree.Min()
 	}
 
@@ -110,9 +114,9 @@ func (t *Tree) Successor(n *Node) *Node {
 	return y
 }
 
-func (t *Tree) Predecessor(n *Node) *Node {
+func (t *Tree[T]) Predecessor(n *Node[T]) *Node[T] {
 	if n.left != t.Nil {
-		rTree := &Tree{root: n.left, Nil: t.Nil}
+		rTree := &Tree[T]{root: n.left, Nil: t.Nil}
 		return rTree.Max()
 	}
 
@@ -124,13 +128,13 @@ func (t *Tree) Predecessor(n *Node) *Node {
 	return y
 }
 
-func (t *Tree) Add(val int) {
-	newNode := &Node{val: val}
+func (t *Tree[T]) Add(val T) *Node[T] {
+	newNode := &Node[T]{Val: val}
 	y := t.Nil
 	x := t.root
 	for x != t.Nil {
 		y = x
-		if newNode.val < x.val {
+		if newNode.Val.Compare(x.Val) == -1 {
 			x = x.left
 		} else {
 			x = x.right
@@ -140,7 +144,7 @@ func (t *Tree) Add(val int) {
 	newNode.parent = y
 	if y == t.Nil {
 		t.root = newNode
-	} else if newNode.val < y.val {
+	} else if newNode.Val.Compare(y.Val) == -1 {
 		y.left = newNode
 	} else {
 		y.right = newNode
@@ -149,9 +153,11 @@ func (t *Tree) Add(val int) {
 	newNode.right = t.Nil
 	newNode.color = Red
 	t.insertFixup(newNode)
+
+	return newNode
 }
 
-func (t *Tree) insertFixup(z *Node) {
+func (t *Tree[T]) insertFixup(z *Node[T]) {
 	for z.parent.color == Red {
 		if z.parent == z.parent.parent.left {
 			y := z.parent.parent.right
@@ -190,7 +196,7 @@ func (t *Tree) insertFixup(z *Node) {
 	t.root.color = Black
 }
 
-func (t *Tree) leftRotate(x *Node) {
+func (t *Tree[T]) leftRotate(x *Node[T]) {
 	y := x.right
 
 	x.right = y.left
@@ -210,7 +216,7 @@ func (t *Tree) leftRotate(x *Node) {
 	x.parent = y
 }
 
-func (t *Tree) rightRotate(y *Node) {
+func (t *Tree[T]) rightRotate(y *Node[T]) {
 	x := y.left
 
 	y.left = x.right
@@ -230,9 +236,9 @@ func (t *Tree) rightRotate(y *Node) {
 	y.parent = x
 }
 
-func (t *Tree) Order() (result []int) {
+func (t *Tree[T]) Order() (result []T) {
 	x := t.root
-	var stack []*Node
+	var stack []*Node[T]
 	for len(stack) != 0 || x != t.Nil {
 		if x != t.Nil {
 			stack = append(stack, x)
@@ -240,18 +246,18 @@ func (t *Tree) Order() (result []int) {
 		} else {
 			x = stack[len(stack)-1]
 			stack = stack[:len(stack)-1]
-			result = append(result, x.val)
+			result = append(result, x.Val)
 			x = x.right
 		}
 	}
 	return
 }
 
-func (t *Tree) Delete(z *Node) {
+func (t *Tree[T]) Delete(z *Node[T]) {
 	y := z
 	yOriginalColor := y.color
 
-	var x *Node
+	var x *Node[T]
 	if z.left == t.Nil {
 		x = z.right
 		t.transplant(z, z.right)
@@ -259,7 +265,7 @@ func (t *Tree) Delete(z *Node) {
 		x = z.left
 		t.transplant(z, z.left)
 	} else {
-		rTree := &Tree{
+		rTree := &Tree[T]{
 			root: z.right,
 			Nil:  t.Nil,
 		}
@@ -284,7 +290,7 @@ func (t *Tree) Delete(z *Node) {
 	}
 }
 
-func (t *Tree) transplant(u, v *Node) {
+func (t *Tree[T]) transplant(u, v *Node[T]) {
 	if u.parent == t.Nil {
 		t.root = v
 	} else if u == u.parent.left {
@@ -295,7 +301,7 @@ func (t *Tree) transplant(u, v *Node) {
 	v.parent = u.parent
 }
 
-func (t *Tree) deleteFixUp(x *Node) {
+func (t *Tree[T]) deleteFixUp(x *Node[T]) {
 	for x != t.root && x.color == Black {
 		if x == x.parent.left {
 			w := x.parent.right

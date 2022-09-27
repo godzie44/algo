@@ -312,3 +312,94 @@ func JarvisScan(q []Point) []Point {
 
 	return res
 }
+
+func NearPoints(points []*Point) (*Point, *Point) {
+	x := make([]*Point, len(points))
+	y := make([]*Point, len(points))
+
+	for i, p := range points {
+		x[i] = p
+		y[i] = p
+	}
+
+	sort.Slice(x, func(i, j int) bool {
+		return x[i].x < x[j].x
+	})
+	sort.Slice(y, func(i, j int) bool {
+		return y[i].y < y[j].y
+	})
+
+	return nearPoints(x, y)
+}
+
+func nearPoints(x []*Point, y []*Point) (*Point, *Point) {
+	if len(x) <= 3 {
+		min := math.MaxFloat64
+		var p1, p2 *Point
+		for i := range x {
+			for j := i + 1; j < len(x); j++ {
+				dist := x[i].distance(x[j])
+				if min > dist {
+					min = dist
+					p1, p2 = x[i], x[j]
+				}
+			}
+		}
+		return p1, p2
+	}
+
+	med := (len(x) + 1) / 2
+	medX := x[med-1].x + (x[med].x - x[med-1].x)
+	xl, xr := x[:med], x[med:]
+
+	pl := make(map[*Point]struct{})
+	for _, x := range xl {
+		pl[x] = struct{}{}
+	}
+
+	yl, yr := breakY(pl, y)
+
+	pl1, pl2 := nearPoints(xl, yl)
+	pr1, pr2 := nearPoints(xr, yr)
+
+	var pMin1, pMin2 *Point
+	if pl1.distance(pl2) < pr1.distance(pr2) {
+		pMin1, pMin2 = pl1, pl2
+	} else {
+		pMin1, pMin2 = pr1, pr2
+	}
+
+	sigma := pMin1.distance(pMin2)
+
+	ys := make([]*Point, 0)
+	for _, p := range y {
+		if p.x >= medX-sigma && p.x <= medX+sigma {
+			ys = append(ys, p)
+		}
+	}
+
+	for i := range ys {
+		for j := i + 1; j < len(ys) && j <= i+7; j++ {
+			dist := ys[i].distance(ys[j])
+			if dist < sigma {
+				sigma = dist
+				pMin1, pMin2 = ys[i], ys[j]
+			}
+		}
+	}
+
+	return pMin1, pMin2
+}
+
+func breakY(pl map[*Point]struct{}, y []*Point) (yl []*Point, yr []*Point) {
+	for _, yi := range y {
+		_, inPl := pl[yi]
+		if inPl {
+			yl = append(yl, yi)
+		} else {
+			yr = append(yr, yi)
+		}
+	}
+
+	return yl, yr
+}

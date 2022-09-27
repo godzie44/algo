@@ -2,6 +2,7 @@ package geometry
 
 import (
 	"github.com/stretchr/testify/assert"
+	"math"
 	"testing"
 )
 
@@ -116,4 +117,41 @@ func TestJarvisScan(t *testing.T) {
 	}
 
 	assert.Equal(t, []Point{{1, 0}, {8, 1}, {9, 3}, {1.5, 8}, {0, 3}}, JarvisScan(points))
+}
+
+func TestNearPoints(t *testing.T) {
+	points := []*Point{
+		{1, 0},
+		{3, 0},
+		{6, 0},
+		{2, 1},
+		{5, 1},
+		{7, 1},
+		{0, 1.5},
+		{3, 2},
+		{4, 2.2},
+		{5, 2.5},
+		{0, 3},
+		{5, 3},
+		{2, 3.5},
+		{6, 3.5},
+		{0.5, 4},
+		{4, 4},
+	}
+
+	var expectedP1, expectedP2 *Point
+	var minDist = math.MaxFloat64
+	for i := range points {
+		for j := i + 1; j < len(points); j++ {
+			dist := points[i].distance(points[j])
+			if dist < minDist {
+				minDist = dist
+				expectedP1, expectedP2 = points[i], points[j]
+			}
+		}
+	}
+
+	p1, p2 := NearPoints(points)
+	assert.Equal(t, expectedP1, p1)
+	assert.Equal(t, expectedP2, p2)
 }

@@ -59,8 +59,8 @@ func (iv *indexVector) delete(val int) {
 	idx := iv.index(val)
 	delete(iv.search, val)
 	iv.vals = append(iv.vals[:idx], iv.vals[idx+1:]...)
-	for i, v := range iv.vals[idx:] {
-		iv.search[v] = i
+	for i := idx; i < len(iv.vals); i++ {
+		iv.search[iv.vals[i]] = i
 	}
 }
 
@@ -185,14 +185,26 @@ func initSimplex(a Matrix, b, c Vector) (*indexVector, *indexVector, Matrix, Vec
 	nVars, bVars, a, b, c, v = pivot(nVars, bVars, a, b, c, v, l, nLen+mLen)
 
 	delta := make(Vector, len(a))
+	counter := 1
 	for nVars.forAnyIndexGreater(c, zero) {
 		var e int
-		for _, candidate := range nVars.vals {
-			if c[candidate] > zero {
-				e = candidate
-				break
+
+		if counter%5 == 0 {
+			for j := len(c) - 1; j >= 0; j-- {
+				if c[j] > zero {
+					e = nVars.index(j)
+					break
+				}
+			}
+		} else {
+			for j := range c {
+				if c[j] > zero {
+					e = nVars.index(j)
+					break
+				}
 			}
 		}
+		counter++
 
 		for _, i := range bVars.vals {
 			if a[bVars.index(i)][e] > 0 {
@@ -241,16 +253,18 @@ func initSimplex(a Matrix, b, c Vector) (*indexVector, *indexVector, Matrix, Vec
 			if math.Abs(val) < zero {
 				continue
 			} else if bVars.exists(i) {
-				tmp := make([]float64, len(a[i]))
-				for j := range a[i] {
-					tmp[j] = -val * a[i][j]
+				index := bVars.index(i)
+				tmp := make([]float64, len(a[index]))
+				for j := range a[index] {
+					tmp[j] = -val * a[index][j]
 				}
 				for j := range c {
 					c[j] += tmp[j]
 				}
-				v += val * b[i]
+				v += val * b[index]
 			} else {
-				c[i] += val
+				index := nVars.index(i)
+				c[index] += val
 			}
 		}
 		return nVars, bVars, a, b, c, v, nil
